@@ -12,7 +12,7 @@
     <main class="home-main">
       <div class="bauhaus-viewport">
         <div class="bauhaus-stage-outer">
-          <!-- 6×3 = 18 squares; JS may tile clones. Shapes live in .geo-mosaic-inner so the grid square does not rotate. -->
+          <!-- 6×4 = 24 squares; JS may tile clones. Shapes live in .geo-mosaic-inner so the grid square does not rotate. -->
           <div class="bauhaus-stage">
             <!-- Row 1 -->
             <div class="geo-cell" data-shape="square" data-cell="g1" data-effect="spawn">
@@ -46,7 +46,7 @@
                 </div>
               </div>
             </div>
-            <div class="geo-cell" data-shape="square" data-cell="g5" data-effect="lit">
+            <div class="geo-cell" data-shape="square" data-cell="g5" data-effect="wobble">
               <div class="geo-stack">
                 <div class="geo-mosaic-inner">
                   <div class="geo-solid geo-fill-yellow"></div>
@@ -102,7 +102,11 @@
                 </div>
               </div>
             </div>
-            <div class="geo-cell" data-shape="square" data-cell="g12" data-effect="lit">
+            <div class="geo-cell"
+              data-shape="square"
+              data-cell="g12"
+              data-effect="runner"
+              data-runner-dir="1">
               <div class="geo-stack">
                 <div class="geo-mosaic-inner">
                   <div class="geo-solid geo-fill-tile-cycling"></div>
@@ -151,6 +155,54 @@
               </div>
             </div>
             <div class="geo-cell" data-shape="square" data-cell="g18" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-yellow"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: extra solid prototypes (more motion when the grid is tiled). -->
+            <div class="geo-cell" data-shape="square" data-cell="g19" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-blue"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell"
+              data-shape="square"
+              data-cell="g20"
+              data-effect="runner"
+              data-runner-dir="3">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g21" data-effect="wobble">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-yellow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g22" data-effect="fade">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-blue"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g23" data-effect="opacity">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g24" data-effect="lit">
               <div class="geo-stack">
                 <div class="geo-mosaic-inner">
                   <div class="geo-solid geo-fill-yellow"></div>

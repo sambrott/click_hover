@@ -48,6 +48,80 @@ $(function () {
       };
     }
 
+    /** Spawn-heavy palette; tiled clones regain motion from here. Runners pick data-runner-dir. */
+    var motionEffectsForSolidSquares = [
+      'spawn',
+      'runner',
+      'spawn',
+      'spawn',
+      'runner',
+      'spawn',
+      'wobble',
+      'spawn',
+      'fade',
+      'spawn',
+      'spawn',
+      'runner',
+      'opacity',
+      'spawn',
+      'lit',
+      'runner',
+      'spawn',
+      'runner',
+      'spawn',
+      'spawn'
+    ];
+
+    function isPlainSolidSquareCell($cell) {
+      if ($cell.attr('data-shape') !== 'square') return false;
+      if ($cell.find('.geo-split').length) return false;
+      var $inner = $cell
+        .find('.geo-mosaic-inner')
+        .not('.geo-layer-hover')
+        .first();
+      if (!$inner.length)
+        $inner = $cell.find('.geo-mosaic-inner').first();
+      if (!$inner.length) return false;
+      var $kids = $inner.children();
+      if (!$kids.length) return false;
+      var ok = true;
+      $kids.each(function () {
+        if (!$(this).hasClass('geo-solid')) ok = false;
+      });
+      return ok;
+    }
+
+    function mosaicHash32(a, b, c, d) {
+      var x =
+        ((a | 0) * 1597334677 ^
+          (b | 0) * 3816253469 ^
+          (c | 0) * 2246822519 ^
+          (d | 0) * 3266489917) >>>
+        0;
+      x ^= x >>> 16;
+      x = (x * 2246822519) >>> 0;
+      x ^= x >>> 13;
+      return x >>> 0;
+    }
+
+    function mosaicPatternIndex(gridIndex, columnCount, rowCount, patternCount) {
+      if (patternCount <= 1) return 0;
+      var h = mosaicHash32(gridIndex, columnCount, rowCount, patternCount);
+      return h % patternCount;
+    }
+
+    function mosaicYawDeg(gridIndex, columnCount, rowCount, salt) {
+      var h = mosaicHash32(gridIndex + 997, rowCount, columnCount, salt | 0);
+      return ((h >>> 0) % 4) * 90;
+    }
+
+    function applyStackYaw($cell, yawDeg) {
+      var stackEl = $cell.find('.geo-stack').get(0);
+      if (stackEl && stackEl.style) {
+        stackEl.style.setProperty('--geo-yaw', yawDeg + 'deg');
+      }
+    }
+
     function accentAtCycleStep(step) {
       var s = String(step);
       if (s === '0') return spawnPalette[0];
@@ -166,16 +240,41 @@ $(function () {
       var total = cols * rows;
       var P = mosaicPatternNodes.length;
       for (var i = 0; i < total; i++) {
-        var $node = $(mosaicPatternNodes[i % P].cloneNode(true));
+        var pi = mosaicPatternIndex(i, cols, rows, P);
+        var $node = $(mosaicPatternNodes[pi].cloneNode(true));
         $node.attr('data-cell', 't' + i);
         if (i >= P) {
           $node.removeAttr('data-effect');
+        }
+        if (isPlainSolidSquareCell($node)) {
+          var rawEff = $node.attr('data-effect');
+          var hasEff =
+            rawEff !== undefined && String(rawEff).length > 0;
+          var needsMotion = i >= P || !hasEff;
+          if (needsMotion) {
+            $node.attr(
+              'data-effect',
+              motionEffectsForSolidSquares[
+                i % motionEffectsForSolidSquares.length
+              ]
+            );
+          }
+        }
+        if ($node.attr('data-effect') === 'runner') {
+          var rd = $node.attr('data-runner-dir');
+          if (rd === undefined || String(rd) === '') {
+            $node.attr('data-runner-dir', String(i % 4));
+          }
+        }
+        if ($node.attr('data-effect') !== 'runner') {
+          $node.removeAttr('data-runner-dir');
         }
         if (allowHoverAccent) {
           $node.find('.geo-stack').each(function () {
             ensureHoverDupLayer($(this));
           });
         }
+        applyStackYaw($node, mosaicYawDeg(i, cols, rows, P));
         $stage.append($node);
       }
 
@@ -184,6 +283,18 @@ $(function () {
         gridTemplateRows: 'repeat(' + rows + ', ' + cellPx + 'px)'
       });
       $stage[0].style.setProperty('--cell', cellPx + 'px');
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var prefColsStatic = 6;
+      var prefRowsStatic = 4;
+      var prefP = mosaicPatternNodes.length;
+      $stage.children('.geo-cell').each(function (idx) {
+        applyStackYaw(
+          $(this),
+          mosaicYawDeg(idx, prefColsStatic, prefRowsStatic, prefP)
+        );
+      });
     }
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -242,23 +353,45 @@ $(function () {
       $cell.attr('data-cycle-step', String(cur));
     }
 
-    function spawnChip($stack) {
-      function drop(lox, loy) {
-        var c =
-          spawnPalette[Math.floor(Math.random() * spawnPalette.length)];
-        var left = lox + Math.random() * 34;
-        var top = loy + Math.random() * 34;
-        $('<div class="geo-mini-chip"></div>')
-          .css({
-            backgroundColor: c,
-            left: left + '%',
-            top: top + '%'
-          })
-          .appendTo($stack);
-      }
+    /** From data-cell ids like "t90" → 90; feeds spawn layout + runner-dir fallback. */
+    function parseCellOrdinal($jq) {
+      var $cell = $jq && $jq.closest ? $jq.closest('.geo-cell') : $jq;
+      if (!$cell || !$cell.length) return 0;
+      var raw = String($cell.attr('data-cell') || '');
+      var n = parseInt(raw.replace(/^[^0-9]+/, ''), 10);
+      return Number.isFinite(n) ? n : 0;
+    }
 
-      drop(5, 5);
-      drop(48, 48);
+    /** Runner direction on .geo-cell: 0=right, 1=down, 2=left, 3=up. */
+    function ensureRunnerDir($cell) {
+      if (!$cell.length) return 0;
+      var raw = $cell.attr('data-runner-dir');
+      var v =
+        raw === undefined || String(raw).length === 0
+          ? NaN
+          : parseInt(String(raw), 10);
+      if (!Number.isFinite(v)) {
+        v = parseCellOrdinal($cell) % 4;
+        $cell.attr('data-runner-dir', String(v));
+      }
+      return ((v % 4) + 4) % 4;
+    }
+
+    function spawnChip($stack) {
+      var k = parseCellOrdinal($stack);
+      var baseX = 18 + ((k * 17) % 48);
+      var baseY = 18 + ((k * 23) % 48);
+      var c =
+        spawnPalette[Math.floor(Math.random() * spawnPalette.length)];
+      var left = baseX + Math.random() * 22;
+      var top = baseY + Math.random() * 22;
+      $('<div class="geo-mini-chip"></div>')
+        .css({
+          backgroundColor: c,
+          left: Math.min(74, left) + '%',
+          top: Math.min(74, top) + '%'
+        })
+        .appendTo($stack);
     }
 
     function runRunner($stack) {
@@ -266,6 +399,7 @@ $(function () {
       var hovered = $cell.is(':hover');
       var $inner = mosaicVisibleInner($stack);
       if (!$inner.length) return;
+      ensureRunnerDir($cell);
       $inner.removeClass('geo-stack--runner geo-stack--runner-hover');
       $inner[0].offsetWidth;
       $inner.addClass(hovered ? 'geo-stack--runner-hover' : 'geo-stack--runner');
@@ -293,7 +427,8 @@ $(function () {
 
     $stage.on('click', '.geo-cell', function (e) {
       var $cell = $(this);
-      var eff = $cell.data('effect');
+      var effRaw = $cell.attr('data-effect');
+      var eff = effRaw === undefined ? undefined : effRaw;
       var $stack = $cell.find('.geo-stack');
 
       if (eff && e.shiftKey) {
@@ -301,7 +436,16 @@ $(function () {
         return;
       }
 
-      bumpColorCycle($cell);
+      /** Spawn/runner only: those defer cycling (runner advances palette after marquee). */
+      var hasSplit = $cell.find('.geo-split').length > 0;
+      var squareEffectPalette =
+        $cell.attr('data-shape') === 'square' &&
+        !hasSplit &&
+        eff &&
+        /^(spawn|runner)$/.test(String(eff));
+      if (!squareEffectPalette) {
+        bumpColorCycle($cell);
+      }
 
       if ($cell.attr('data-shape') === 'curve') {
         bumpCurveRotation($cell);
@@ -344,8 +488,18 @@ $(function () {
       if (name === 'geo-square-pop' || name === 'geo-curve-flash') {
         $el.closest('.geo-cell').removeClass('geo-cell--clicked');
       }
-      if (name === 'geo-runner-marquee' || name === 'geo-runner-marquee-hover') {
+      if (
+        name &&
+        /^geo-runner-marquee-[rldu](?:-hover)?$/.test(String(name))
+      ) {
         $el.removeClass('geo-stack--runner geo-stack--runner-hover');
+        var $runnerCell = $el.closest('.geo-cell');
+        if (
+          $runnerCell.length &&
+          String($runnerCell.attr('data-effect')) === 'runner'
+        ) {
+          bumpColorCycle($runnerCell);
+        }
       }
       if (name === 'geo-wobble') {
         $el.removeClass('geo-stack--wobble');

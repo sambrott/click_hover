@@ -61,7 +61,7 @@ body.site {
 .bauhaus-stage {
   display: inline-grid;
   grid-template-columns: repeat(6, var(--cell));
-  grid-template-rows: repeat(3, var(--cell));
+  grid-template-rows: repeat(4, var(--cell));
   gap: 0;
   align-items: start;
   width: max-content;
@@ -70,7 +70,7 @@ body.site {
   /* Cover layout (square tiles extend past edges—outer clips). JS replaces cols/rows when enabled. */
   --cell: max(
     calc(min(100vh, 100dvh) / 6),
-    calc(min(100vw, 100dvw) / 3)
+    calc(min(100vw, 100dvw) / 4)
   );
   animation: geo-stage-pulse 14s ease-in-out infinite alternate;
 }
@@ -97,6 +97,8 @@ body.site {
 .geo-stack {
   position: absolute;
   inset: 0;
+  transform: rotate(var(--geo-yaw, 0deg));
+  transform-origin: center center;
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.38s ease,
@@ -165,7 +167,7 @@ body.site {
 }
 
 .geo-cell[data-shape='square']:hover .geo-stack {
-  transform: scale(1.06);
+  transform: rotate(var(--geo-yaw, 0deg)) scale(1.06);
 }
 
 .geo-stack--lit {
@@ -243,7 +245,7 @@ body.site {
   }
 }
 
-@keyframes geo-runner-marquee {
+@keyframes geo-runner-marquee-r {
   0% {
     transform: translateX(0) scale(1);
   }
@@ -264,7 +266,7 @@ body.site {
   }
 }
 
-@keyframes geo-runner-marquee-hover {
+@keyframes geo-runner-marquee-r-hover {
   0% {
     transform: translateX(0) scale(1.06);
   }
@@ -285,12 +287,165 @@ body.site {
   }
 }
 
+@keyframes geo-runner-marquee-l {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  36% {
+    transform: translateX(-132%) scale(1);
+  }
+  52% {
+    transform: translateX(-118%) scale(1);
+  }
+  74% {
+    transform: translateX(10%) scale(1);
+  }
+  88% {
+    transform: translateX(-4%) scale(1);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes geo-runner-marquee-l-hover {
+  0% {
+    transform: translateX(0) scale(1.06);
+  }
+  36% {
+    transform: translateX(-132%) scale(1.06);
+  }
+  52% {
+    transform: translateX(-118%) scale(1.06);
+  }
+  74% {
+    transform: translateX(10%) scale(1.06);
+  }
+  88% {
+    transform: translateX(-4%) scale(1.06);
+  }
+  100% {
+    transform: translateX(0) scale(1.06);
+  }
+}
+
+@keyframes geo-runner-marquee-d {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  36% {
+    transform: translateY(132%) scale(1);
+  }
+  52% {
+    transform: translateY(118%) scale(1);
+  }
+  74% {
+    transform: translateY(-10%) scale(1);
+  }
+  88% {
+    transform: translateY(4%) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes geo-runner-marquee-d-hover {
+  0% {
+    transform: translateY(0) scale(1.06);
+  }
+  36% {
+    transform: translateY(132%) scale(1.06);
+  }
+  52% {
+    transform: translateY(118%) scale(1.06);
+  }
+  74% {
+    transform: translateY(-10%) scale(1.06);
+  }
+  88% {
+    transform: translateY(4%) scale(1.06);
+  }
+  100% {
+    transform: translateY(0) scale(1.06);
+  }
+}
+
+@keyframes geo-runner-marquee-u {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  36% {
+    transform: translateY(-132%) scale(1);
+  }
+  52% {
+    transform: translateY(-118%) scale(1);
+  }
+  74% {
+    transform: translateY(10%) scale(1);
+  }
+  88% {
+    transform: translateY(-4%) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes geo-runner-marquee-u-hover {
+  0% {
+    transform: translateY(0) scale(1.06);
+  }
+  36% {
+    transform: translateY(-132%) scale(1.06);
+  }
+  52% {
+    transform: translateY(-118%) scale(1.06);
+  }
+  74% {
+    transform: translateY(10%) scale(1.06);
+  }
+  88% {
+    transform: translateY(-4%) scale(1.06);
+  }
+  100% {
+    transform: translateY(0) scale(1.06);
+  }
+}
+
 .geo-mosaic-inner.geo-stack--runner {
-  animation: geo-runner-marquee 1.12s cubic-bezier(0.45, 0.02, 0.28, 1) forwards;
+  animation: geo-runner-marquee-r 1.12s cubic-bezier(0.45, 0.02, 0.28, 1)
+    forwards;
 }
 
 .geo-mosaic-inner.geo-stack--runner-hover {
-  animation: geo-runner-marquee-hover 1.12s cubic-bezier(0.45, 0.02, 0.28, 1) forwards;
+  animation: geo-runner-marquee-r-hover 1.12s
+    cubic-bezier(0.45, 0.02, 0.28, 1) forwards;
+}
+
+/* data-runner-dir: 0/right default, 1=down, 2=left, 3=up (set when tiling each clone). */
+.geo-cell[data-runner-dir='1'] .geo-mosaic-inner.geo-stack--runner {
+  animation-name: geo-runner-marquee-d;
+}
+
+.geo-cell[data-runner-dir='1'] .geo-mosaic-inner.geo-stack--runner-hover {
+  animation-name: geo-runner-marquee-d-hover;
+}
+
+.geo-cell[data-runner-dir='2'] .geo-mosaic-inner.geo-stack--runner {
+  animation-name: geo-runner-marquee-l;
+}
+
+.geo-cell[data-runner-dir='2'] .geo-mosaic-inner.geo-stack--runner-hover {
+  animation-name: geo-runner-marquee-l-hover;
+}
+
+.geo-cell[data-runner-dir='3'] .geo-mosaic-inner.geo-stack--runner {
+  animation-name: geo-runner-marquee-u;
+}
+
+.geo-cell[data-runner-dir='3'] .geo-mosaic-inner.geo-stack--runner-hover {
+  animation-name: geo-runner-marquee-u-hover;
 }
 
 @keyframes geo-wobble {
@@ -625,10 +780,10 @@ body.site {
     min-height: 0;
     margin-inline: auto;
     grid-template-columns: repeat(6, var(--cell));
-    grid-template-rows: repeat(3, var(--cell));
+    grid-template-rows: repeat(4, var(--cell));
     --cell: max(
       calc(min(100vw, 100dvw) / 6),
-      calc(min(100vh, 100dvh) / 3)
+      calc(min(100vh, 100dvh) / 4)
     );
     padding-block: 0;
   }
@@ -640,7 +795,7 @@ body.site {
   }
 
   .geo-cell[data-shape='square']:hover .geo-stack {
-    transform: scale(1.03);
+    transform: rotate(var(--geo-yaw, 0deg)) scale(1.03);
   }
 
   .geo-cell[data-shape='square'].geo-cell--clicked
