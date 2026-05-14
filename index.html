@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Click and Hover</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body class="site home">
+    <main class="home-main">
+      <div class="bauhaus-viewport">
+        <div class="bauhaus-stage-outer">
+          <!-- 6×3 = 18 squares; JS may tile clones. Shapes live in .geo-mosaic-inner so the grid square does not rotate. -->
+          <div class="bauhaus-stage">
+            <!-- Row 1 -->
+            <div class="geo-cell" data-shape="square" data-cell="g1" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-tile-cycling"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g2">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-solid geo-fill-orange geo-corner-bl"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g3">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-arc-tr-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g4" data-effect="fade">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-ring-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g5" data-effect="lit">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-yellow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g6" data-effect="opacity">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-blue"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="geo-cell" data-shape="square" data-cell="g7">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-split">
+                    <span class="geo-split__blue"></span>
+                    <span class="geo-split__yellow"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g8" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g9">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-semi-top geo-fill-blue"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g10" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-yellow geo-corner-br"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g11">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-semi-bottom geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g12" data-effect="lit">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-tile-cycling"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="geo-cell" data-shape="curve" data-cell="g13">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-semi-top geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g14" data-effect="fade">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-arc-br-blue"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g15" data-effect="wobble">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-bite-blue-br"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="curve" data-cell="g16">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-ground"></div>
+                  <div class="geo-semi-top geo-fill-yellow"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g17" data-effect="runner">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-orange"></div>
+                </div>
+              </div>
+            </div>
+            <div class="geo-cell" data-shape="square" data-cell="g18" data-effect="spawn">
+              <div class="geo-stack">
+                <div class="geo-mosaic-inner">
+                  <div class="geo-solid geo-fill-yellow"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

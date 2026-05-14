@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page 1 — Hover, toggleClass, fade</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body class="site p1">
+    <a class="sub-back" href="../index.html">← Back</a>
+    <div class="sub-wrap">
+      <h1 class="sub-title">Page 1</h1>
+      <p class="sub-note">
+        <strong>.hover</strong> on the four squares toggles the big block’s class (shape + color).
+        <strong>Click</strong> a square to <strong>.toggleClass(&quot;is-lit&quot;)</strong>. Button uses
+        <strong>.fadeToggle</strong> on the three slabs.
+      </p>
+      <div id="p1-tiles" class="p1-stage">
+        <div class="p1-tile p1-tile--a" title="Hover me"></div>
+        <div class="p1-tile p1-tile--b" title="Hover me"></div>
+        <div class="p1-tile p1-tile--c" title="Hover me"></div>
+        <div class="p1-tile p1-tile--d" title="Hover me"></div>
+      </div>
+      <div id="p1-blob" class="p1-blob" aria-hidden="true"></div>
+      <button type="button" id="p1-fade-btn" class="p4-add">Fade slabs in / out</button>
+      <div class="p1-fade-zone">
+        <div class="slab p1-slab-1"></div>
+        <div class="slab p1-slab-2"></div>
+        <div class="slab p1-slab-3"></div>
+      </div>
+    </div>
+  </body>
+</html>

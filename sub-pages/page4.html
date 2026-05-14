@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page 4 — Append &amp; before</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body class="site p4">
+    <a class="sub-back" href="../index.html">← Back</a>
+    <div class="sub-wrap">
+      <h1 class="sub-title">Page 4</h1>
+      <p class="sub-note">
+        <strong>Append</strong> adds a random solid square at the end of the canvas.
+        <strong>Before</strong> inserts one before the first chip (or appends if the canvas is empty).
+      </p>
+      <div class="p2-row" style="margin-top: 0">
+        <button type="button" id="p4-add" class="p4-add">Append chip</button>
+        <button type="button" id="p4-before" class="p4-add">Insert before first</button>
+      </div>
+      <div id="p4-canvas" class="p4-canvas" aria-live="polite"></div>
+    </div>
+  </body>
+</html>

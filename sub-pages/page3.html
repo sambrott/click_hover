@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page 3 — Scroll &amp; css</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body class="site p3">
+    <a class="sub-back" href="../index.html">← Back</a>
+    <div class="sub-wrap">
+      <h1 class="sub-title">Page 3</h1>
+      <p class="sub-note">
+        Scroll the page: the meter uses <strong>.css(&quot;width&quot;, …)</strong> from a
+        <strong>scroll</strong> listener. The note below fades in opacity via <strong>.css</strong> as you go
+        deeper.
+      </p>
+      <div class="p3-meter-wrap">
+        <div class="p3-meter">
+          <div id="p3-meter-fill" class="p3-meter-fill"></div>
+        </div>
+      </div>
+      <p id="p3-scroll-readout" class="sub-note" style="margin-top: 0.75rem">
+        Scroll down — the fill tracks your position in the page.
+      </p>
+      <div class="p3-tower">
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+        <div class="p3-stack"></div>
+      </div>
+      <div class="p3-spacer">Extra length so scroll has room to move.</div>
+    </div>
+  </body>
+</html>

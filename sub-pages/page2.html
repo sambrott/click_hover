@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page 2 — Animate</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <script src="../script.js" defer></script>
+  </head>
+  <body class="site p2">
+    <a class="sub-back" href="../index.html">← Back</a>
+    <div class="sub-wrap">
+      <h1 class="sub-title">Page 2</h1>
+      <p class="sub-note">
+        <strong>Click</strong> a square for a quick <strong>.animate</strong> opacity pulse. The button runs a
+        horizontal <strong>.animate</strong> on the orange block.
+      </p>
+      <div class="p2-row">
+        <div class="p2-box p2-box--1" title="Click"></div>
+        <div class="p2-box p2-box--2" title="Click"></div>
+        <div class="p2-box p2-box--3" title="Click"></div>
+      </div>
+      <button type="button" id="p2-run" class="p4-add">Run slide animation</button>
+      <div class="p2-runner">
+        <div id="p2-runner-inner" class="p2-runner-inner"></div>
+      </div>
+    </div>
+  </body>
+</html>
